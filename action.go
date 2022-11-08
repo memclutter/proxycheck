@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 	"h12.io/socks"
 )
 

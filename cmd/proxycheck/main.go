@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/memclutter/proxycheck"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
@@ -15,16 +15,16 @@ func main() {
 	app.Version = "0.0.0"
 
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "targetURL",
 			Usage: "Target url for checking proxy",
 			Value: "https://google.com",
 		},
-		cli.StringSliceFlag{
+		&cli.StringSliceFlag{
 			Name:  "proxyAddr",
 			Usage: "Specify proxy address to check, format scheme://host:port",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "proxyAddrFile",
 			Usage: "Specify proxy list file, contains on each line scheme://host:port",
 		},
