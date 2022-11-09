@@ -9,6 +9,12 @@ on:
 jobs:
 
   test:
+    services:
+      proxy:
+        image: abhinavsingh/proxy.py:v2.4.4
+        ports:
+          - "8899:8899"
+
     strategy:
       matrix:
         go_version: [ '1.17', '1.18' ]
@@ -23,7 +29,7 @@ jobs:
           go-version: ${{ matrix.go_version }}
 
       - name: Test GO ${{ matrix.go_version }}
-        run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+        run: PROXY_URL=http://localhost:8899 go test ./... -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload to codecov
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.go_version == '1.17' }}
