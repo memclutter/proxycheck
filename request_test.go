@@ -27,7 +27,7 @@ func TestProxyRequest(t *testing.T) {
 
 	body, err := ProxyRequest(targetURLEnv, proxyURL, timeout)
 	require.NoError(t, err, "must be success proxy request")
-	assert.Contains(t, fmt.Sprintf("%s", body), "REQUEST_URI = /azenv.php", "must be contain REQUEST_URI")
+	assert.Contains(t, fmt.Sprintf("%s", body), "Welcome to nginx!", "must be contain REQUEST_URI")
 }
 
 func TestProxyRequestNotReachableError(t *testing.T) {
