@@ -14,11 +14,12 @@ func main() {
 		Description: "Proxy checker tool",
 		Version:     "0.0.1",
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:  "targetURL",
-				Usage: "Target url for checking proxy",
-				Value: "https://google.com",
-			},
+			// @TODO replace with judge name
+			//&cli.StringFlag{
+			//	Name:  "targetURL",
+			//	Usage: "Target url for checking proxy",
+			//	Value: "https://google.com",
+			//},
 			&cli.StringSliceFlag{
 				Name:  "proxyAddr",
 				Usage: "Specify proxy address to check, format scheme://host:port",

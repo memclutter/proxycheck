@@ -2,7 +2,6 @@ package proxycheck
 
 import (
 	"fmt"
-	"net"
 	"net/url"
 	"time"
 )
@@ -14,7 +13,13 @@ type CheckResult struct {
 	Speed     time.Duration
 }
 
-func Check(ip net.IP, port int64, judge Judge) (result CheckResult) {
+func Check(proxyAddr string, judge Judge) (result CheckResult) {
+	ip, port, err := proxyAddrToIpPort(proxyAddr)
+	if err != nil {
+		result.Err[""] = fmt.Errorf("parse addr error: %v", err)
+		return
+	}
+
 	result.Err = make(map[string]error)
 	for _, protocol := range []string{"http", "https", "socks4", "socks5"} {
 		proxyURL, err := url.Parse(fmt.Sprintf("%s://%s:%d", protocol, ip, port))

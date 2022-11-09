@@ -11,7 +11,7 @@ import (
 func Action(c *cli.Context) error {
 
 	// Read cli arguments
-	targetURL := c.String("targetURL")
+	//targetURL := c.String("targetURL")
 	proxyAddrs := c.StringSlice("proxyAddr")
 	proxyAddrFile := c.String("proxyAddrFile")
 
@@ -31,10 +31,10 @@ func Action(c *cli.Context) error {
 
 	// Start one thread proxy check
 	for _, proxyAddr := range proxyAddrs {
-		if err := check(targetURL, proxyAddr); err == nil {
-			fmt.Printf("%s\n", proxyAddr)
+		if res := Check(proxyAddr, &AZEnvPhpJudge{}); res.Online {
+			fmt.Printf("%s\t%s\t%s\n", proxyAddr, strings.Join(res.Protocols, ","), res.Speed.String())
 		} else {
-			log.Printf("invalid proxy %s: %s", proxyAddr, err)
+			fmt.Printf("invalid proxy %s: %v\n", proxyAddr, res.Err)
 		}
 	}
 
