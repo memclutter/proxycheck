@@ -20,8 +20,13 @@ jobs:
                 image: abhinavsingh/proxy.py:v2.4.4
                 ports:
                   - "8899:8899"
+              target:
+                image: nginx:1.23.2
+                ports:
+                  - "80:80"
             env:
               PROXY_URL: 'http://localhost:8899'
+              TARGET_URL: 'http://target:80'
           - os: windows-latest
             services: {}
             env: {}
