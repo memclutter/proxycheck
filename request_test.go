@@ -55,5 +55,5 @@ func TestProxyRequestNotReachableError(t *testing.T) {
 	require.NoError(t, err, "must be correct PROXY_URL url address")
 
 	_, err = ProxyRequest("http://localhost", proxyURL, timeout)
-	require.ErrorContains(t, err, `can't http get: Get "http://localhost": proxyconnect tcp: dial tcp`, "must be error")
+	require.ErrorContains(t, err, `can't http get: Get "http://localhost":`, "must be error")
 }
