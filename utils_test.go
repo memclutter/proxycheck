@@ -3,12 +3,46 @@ package proxycheck
 import (
 	"bytes"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"testing"
 	"time"
 )
+
+func TestProxyAddrToIpPort(t *testing.T) {
+	testingTable := []struct {
+		title        string
+		proxyAddr    string
+		exceptedIP   net.IP
+		exceptedPort int64
+	}{
+		{
+			title:        "must be correct convert ip:port format",
+			proxyAddr:    "89.23.43.100:8899",
+			exceptedIP:   net.ParseIP("89.23.43.100"),
+			exceptedPort: 8899,
+		},
+		{
+			title:        "must be correct convert ip without port format",
+			proxyAddr:    "86.100.202.1",
+			exceptedIP:   net.ParseIP("86.100.202.1"),
+			exceptedPort: 80,
+		},
+	}
+
+	for _, table := range testingTable {
+		t.Run(table.title, func(t *testing.T) {
+			ip, port, err := proxyAddrToIpPort(table.proxyAddr)
+
+			require.NoError(t, err, "must be run without errors")
+			assert.Equal(t, table.exceptedIP, ip, "must be equal ip")
+			assert.Equal(t, table.exceptedPort, port, "must be equal port")
+		})
+	}
+}
 
 func TestReadResponse(t *testing.T) {
 	exceptedBody := []byte(`test`)

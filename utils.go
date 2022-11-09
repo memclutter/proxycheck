@@ -8,9 +8,29 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
+
+func proxyAddrToIpPort(proxyAddr string) (ip net.IP, port int64, err error) {
+	parts := strings.Split(proxyAddr, ":")
+	if len(parts) == 2 {
+		port, err = strconv.ParseInt(parts[1], 10, 64)
+		if err != nil {
+			return ip, port, fmt.Errorf("invalid port: %v", err)
+		}
+	} else if len(parts) == 1 {
+		port = 80
+	}
+
+	ip = net.ParseIP(parts[0])
+	if len(ip) == 0 {
+		return ip, port, fmt.Errorf("invalid ip '%s'", parts[0])
+	}
+
+	return
+}
 
 func createProxyTransport(proxyURL *url.URL, timeout time.Duration) *http.Transport {
 	httpTransport := &http.Transport{
