@@ -14,6 +14,8 @@ type CheckResult struct {
 }
 
 func Check(proxyAddr string, judge Judge) (result CheckResult) {
+	result.Err = make(map[string]error)
+
 	ip, port, err := proxyAddrToIpPort(proxyAddr)
 	if err != nil {
 		result.Err[""] = fmt.Errorf("parse addr error: %v", err)
