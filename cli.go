@@ -5,6 +5,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"os"
 	"strings"
+	"sync"
 )
 
 func Action(c *cli.Context) error {
@@ -18,6 +19,24 @@ func Action(c *cli.Context) error {
 		feed = NewFileFeed(os.Stdin)
 	}
 
+	// Worker pool
+	poolSize := c.Int("threads")
+	proxyAddrs := make(chan string, poolSize)
+	var wg sync.WaitGroup
+	for i := 0; i < poolSize; i++ {
+		wg.Add(1)
+		go func(proxyAddrs chan string) {
+			defer wg.Done()
+			for proxyAddr := range proxyAddrs {
+				if res := Check(proxyAddr, &AZEnvPhpJudge{}); res.Online {
+					fmt.Printf("%s\t%s\t%s\n", proxyAddr, strings.Join(res.Protocols, ","), res.Speed.String())
+				} else {
+					fmt.Fprintf(os.Stderr, "invalid proxy %s: %v\n", proxyAddr, res.Err)
+				}
+			}
+		}(proxyAddrs)
+	}
+
 	// Start one thread proxy check
 	for {
 		proxyAddr, err := feed.Next()
@@ -25,12 +44,9 @@ func Action(c *cli.Context) error {
 			break
 		}
 
-		if res := Check(proxyAddr, &AZEnvPhpJudge{}); res.Online {
-			fmt.Printf("%s\t%s\t%s\n", proxyAddr, strings.Join(res.Protocols, ","), res.Speed.String())
-		} else {
-			fmt.Fprintf(os.Stderr, "invalid proxy %s: %v\n", proxyAddr, res.Err)
-		}
+		proxyAddrs <- proxyAddr
 	}
 
+	wg.Wait()
 	return nil
 }

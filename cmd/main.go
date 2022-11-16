@@ -20,14 +20,7 @@ func main() {
 			//	Usage: "Target url for checking proxy",
 			//	Value: "https://google.com",
 			//},
-			&cli.StringSliceFlag{
-				Name:  "proxyAddr",
-				Usage: "Specify proxy address to check, format scheme://host:port",
-			},
-			&cli.StringFlag{
-				Name:  "proxyAddrFile",
-				Usage: "Specify proxy list file, contains on each line scheme://host:port",
-			},
+			&cli.IntFlag{Name: "threads", Usage: "Count of threads", Value: 10},
 		},
 		Action: proxycheck.Action,
 	}).Run(os.Args); err != nil {
