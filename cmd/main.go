@@ -12,7 +12,7 @@ func main() {
 	if err := (&cli.App{
 		Name:        "proxycheck",
 		Description: "Proxy checker tool",
-		Version:     "0.0.4",
+		Version:     "0.0.5",
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "judge", Usage: "Set judge", Value: "proxyjudge.us"},
 			&cli.IntFlag{Name: "threads", Usage: "Count of threads", Value: 10},
