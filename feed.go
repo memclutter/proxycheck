@@ -8,12 +8,7 @@ import (
 
 var FeedEnd = errors.New("feed end")
 
-type Feed interface {
-	Next() (string, error)
-}
-
-// SliceFeed godoc
-//
+// SliceFeed
 // Proxy feed from string slice like this []string{"108.20.30.1:500", "89.33.123.100:40", "50.73.100.1:55"}
 type SliceFeed struct {
 	idx   int
@@ -31,8 +26,7 @@ func (f *SliceFeed) Next() (string, error) {
 	}
 }
 
-// FileFeed godoc
-//
+// FileFeed
 // Proxy feed from file stream, like stdin, os file.
 type FileFeed struct {
 	s *bufio.Scanner

@@ -7,8 +7,7 @@ import (
 	"time"
 )
 
-// ProxyRequest godoc
-//
+// ProxyRequest
 // Performs an HTTP request through the proxy specified in the proxyUrl
 func ProxyRequest(target string, proxyURL *url.URL, timeout time.Duration) ([]byte, error) {
 	body := make([]byte, 0)
