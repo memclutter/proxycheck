@@ -2,7 +2,8 @@ package proxycheck
 
 import (
 	"bufio"
-	"os"
+	"io"
+	"strings"
 )
 
 // SliceFeed
@@ -15,7 +16,7 @@ type SliceFeed struct {
 func NewSliceFeed(slice []string) *SliceFeed { return &SliceFeed{idx: 0, slice: slice} }
 
 func (f *SliceFeed) Next() (string, error) {
-	if f.idx < len(f.slice)-1 {
+	if f.idx < len(f.slice) {
 		f.idx += 1
 		return f.slice[f.idx-1], nil
 	} else {
@@ -29,18 +30,24 @@ type FileFeed struct {
 	s *bufio.Scanner
 }
 
-func NewFileFeed(file *os.File) *FileFeed {
+func NewFileFeed(file io.Reader) *FileFeed {
 	feed := new(FileFeed)
 	feed.s = bufio.NewScanner(file)
 	return feed
 }
 
 func (f FileFeed) Next() (string, error) {
-	if f.s.Scan() {
-		return f.s.Text(), nil
-	} else if err := f.s.Err(); err != nil {
-		return "", err
-	} else {
-		return "", FeedEnd
+	for {
+		if !f.s.Scan() {
+			if err := f.s.Err(); err != nil {
+				return "", err
+			} else {
+				return "", FeedEnd
+			}
+		}
+		line := strings.TrimSpace(f.s.Text())
+		if len(line) > 0 {
+			return line, nil
+		}
 	}
 }
