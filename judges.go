@@ -2,11 +2,6 @@ package proxycheck
 
 import "time"
 
-type Judge interface {
-	TargetURL() string
-	Timeout() time.Duration
-}
-
 type AZEnvPhpJudge struct {
 }
 

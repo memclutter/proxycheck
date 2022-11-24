@@ -2,11 +2,8 @@ package proxycheck
 
 import (
 	"bufio"
-	"errors"
 	"os"
 )
-
-var FeedEnd = errors.New("feed end")
 
 // SliceFeed
 // Proxy feed from string slice like this []string{"108.20.30.1:500", "89.33.123.100:40", "50.73.100.1:55"}
