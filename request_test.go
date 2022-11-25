@@ -1,7 +1,6 @@
 package proxycheck
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"net/url"
@@ -27,7 +26,7 @@ func TestProxyRequest(t *testing.T) {
 
 	body, err := ProxyRequest(targetURLEnv, proxyURL, timeout)
 	require.NoError(t, err, "must be success proxy request")
-	assert.Contains(t, fmt.Sprintf("%s", body), "Welcome to nginx!", "must be contain Welcome to nginx!")
+	assert.Contains(t, string(body), "Welcome to nginx!", "must be contain Welcome to nginx!")
 }
 
 func TestProxyRequestNot200StatusCode(t *testing.T) {
