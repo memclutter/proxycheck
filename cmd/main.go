@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/memclutter/proxycheck"
-	"github.com/urfave/cli/v2"
+	cli "github.com/urfave/cli/v2"
 )
 
 func main() {

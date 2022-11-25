@@ -2,7 +2,7 @@ package proxycheck
 
 import (
 	"fmt"
-	"github.com/urfave/cli/v2"
+	cli "github.com/urfave/cli/v2"
 	"os"
 	"strings"
 	"sync"
