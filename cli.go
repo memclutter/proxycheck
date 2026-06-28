@@ -14,7 +14,7 @@ func NewApp() *cli.App {
 	return &cli.App{
 		Name:        "proxycheck",
 		Description: "Proxy checker tool",
-		Version:     "0.0.5",
+		Version:     "0.0.6",
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "judge", Usage: "Set judge", Value: "proxyjudge.us"},
 			&cli.IntFlag{Name: "threads", Usage: "Count of threads", Value: 10},
