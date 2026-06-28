@@ -1,6 +1,6 @@
 module github.com/memclutter/proxycheck
 
-go 1.18
+go 1.25
 
 require (
 	github.com/urfave/cli/v2 v2.23.4

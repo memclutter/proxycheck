@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"h12.io/socks"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -56,5 +56,5 @@ func createProxyTransport(proxyURL *url.URL, timeout time.Duration) *http.Transp
 
 func readResponse(httpResponse *http.Response) ([]byte, error) {
 	defer func() { _ = httpResponse.Body.Close() }()
-	return ioutil.ReadAll(httpResponse.Body)
+	return io.ReadAll(httpResponse.Body)
 }
