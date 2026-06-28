@@ -55,6 +55,6 @@ func createProxyTransport(proxyURL *url.URL, timeout time.Duration) *http.Transp
 }
 
 func readResponse(httpResponse *http.Response) ([]byte, error) {
-	defer httpResponse.Body.Close()
+	defer func() { _ = httpResponse.Body.Close() }()
 	return ioutil.ReadAll(httpResponse.Body)
 }
