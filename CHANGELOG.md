@@ -8,12 +8,16 @@ While the major version is `0`, the public API may change in any release.
 
 ## [Unreleased]
 
+## [0.0.6] - 2026-06-28
+
 ### Added
 
 - `CONTRIBUTING.md` describing setup, the test/lint workflow, code style, and the
   commit/PR/release process.
 - This `CHANGELOG.md`, with reconstructed notes for the previously empty
   `v0.0.1`–`v0.0.5` releases.
+- `ResolveJudge` helper that looks a judge up in the `Judges` registry, and a
+  `NewApp` constructor shared by the binary and the tests.
 
 ### Changed
 
@@ -22,6 +26,18 @@ While the major version is `0`, the public API may change in any release.
 - Reworked `README.md`: a description, status badges, install/usage sections, the
   tab-separated output format, a library-usage example, and a "how it works"
   explanation of judges and the protocol probing.
+
+### Fixed
+
+- `--judge` now selects the proxy judge. It was parsed but ignored: every check
+  ran against the AZEnv judge regardless of the flag, so the documented
+  `proxyjudge.us` default never applied. An unknown judge name is now rejected
+  with a non-zero exit, listing the valid names, and no proxies are checked.
+- The CLI no longer hangs after processing all proxies. `Action` never closed its
+  worker channel, so the worker goroutines never returned and the program blocked
+  forever; the channel is now closed once the feed is exhausted.
+- Rewrote the GitHub Actions workflows: pinned current Go versions, fixed the
+  empty `go-version` in the lint job, and dropped the dead OS matrix.
 
 ## [0.0.5] - 2022-11-25
 
