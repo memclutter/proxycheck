@@ -9,45 +9,38 @@ on:
 jobs:
 
   test:
+    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        go_version: [ '1.17', '1.18' ]
-        os: [ 'ubuntu-latest', 'windows-latest', 'macOS-latest' ]
-        include:
-          - os: ubuntu-latest
-            services:
-              proxy:
-                image: abhinavsingh/proxy.py:v2.4.4
-                ports:
-                  - "8899:8899"
-              target:
-                image: nginx:1.23.2
-                ports:
-                  - "80:80"
-            env:
-              PROXY_URL: 'http://localhost:8899'
-              TARGET_URL: 'http://target:80'
-          - os: windows-latest
-            services: {}
-            env: {}
-          - os: macOS-latest
-            services: {}
-            env: {}
-
-    services: ${{ matrix.services }}
-    runs-on: ${{ matrix.os }}
+        go: [ '1.25', '1.26' ]
+    services:
+      proxy:
+        image: abhinavsingh/proxy.py:v2.4.4
+        ports:
+          - "8899:8899"
+      target:
+        image: nginx:1.23.2
+        ports:
+          - "80:80"
+    env:
+      PROXY_URL: 'http://localhost:8899'
+      TARGET_URL: 'http://target:80'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Use GO ${{ matrix.go_version }}
-        uses: actions/setup-go@v2
+      - name: Use Go ${{ matrix.go }}
+        uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go_version }}
+          go-version: ${{ matrix.go }}
 
-      - name: Test GO ${{ matrix.go_version }}
+      - name: Test
         run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
-        env: ${{ matrix.env }}
 
-      - name: Upload to codecov
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.go_version == '1.17' }}
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Upload coverage to Codecov
+        if: ${{ matrix.go == '1.26' }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.txt
+          fail_ci_if_error: false
